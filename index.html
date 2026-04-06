@@ -27,13 +27,18 @@
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <style>
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            max-width: 100%;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
             background-color: #FAFAF8;
             color: #111111;
-            overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
@@ -43,9 +48,10 @@
         }
 
         #hero-lightpass {
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100dvh;
             display: block;
+            object-fit: cover;
         }
 
         /* Smooth scrollbar for a premium feel */
@@ -117,36 +123,36 @@
     </div>
 
     <!-- The 600vh container allows the user to scroll to trigger the canvas sequence -->
-    <div id="main-scroll" class="relative w-full h-[600vh] bg-canvas-bg">
+    <div id="main-scroll" class="relative w-full h-[600vh] bg-canvas-bg overflow-hidden border-none m-0 p-0">
         
         <!-- Sticky container holds the canvas and text fixed to the screen as you scroll -->
-        <div class="sticky top-0 w-full h-screen overflow-hidden flex items-center justify-center">
+        <div class="sticky top-0 w-full h-[100dvh] overflow-hidden flex items-center justify-center">
             
             <!-- Canvas Sequence -->
             <canvas id="hero-lightpass" class="absolute inset-0 z-0"></canvas>
 
             <!-- Text Overlay 1 (Positioned at bottom center so it doesn't cover image) -->
-            <div class="absolute inset-0 flex flex-col justify-end pb-24 items-center z-10 pointer-events-none px-6" id="text-container-1">
-                <p class="text-xs md:text-sm font-medium text-white/90 tracking-[0.5em] uppercase mb-4 drop-shadow-md">Raw & Unfiltered</p>
-                <h1 class="text-5xl md:text-8xl font-bold text-white leading-none drop-shadow-2xl text-center">Pure Watermelon</h1>
+            <div class="absolute inset-0 flex flex-col justify-end pb-12 md:pb-24 items-center z-10 pointer-events-none px-4 md:px-6" id="text-container-1">
+                <p class="text-[0.65rem] md:text-sm font-bold text-white/95 tracking-[0.4em] md:tracking-[0.5em] uppercase mb-3 md:mb-4 drop-shadow-lg">Raw & Unfiltered</p>
+                <h1 class="text-4xl sm:text-5xl md:text-8xl font-bold text-white leading-[1.1] drop-shadow-2xl text-center">Pure<br class="md:hidden"> Watermelon</h1>
             </div>
 
             <!-- Text Overlay 2 -->
-            <div class="absolute inset-0 flex flex-col justify-center items-center z-10 pointer-events-none opacity-0 px-6 text-center" id="text-container-2">
-                <h2 class="text-4xl md:text-7xl font-bold text-white drop-shadow-2xl mb-6">Cold-Pressed Extract</h2>
-                <p class="text-base md:text-xl text-white/95 font-light max-w-lg drop-shadow-md">Every drop is extracted without heat, locking in the natural flavor and essential nutrients.</p>
+            <div class="absolute inset-0 flex flex-col justify-center items-center z-10 pointer-events-none opacity-0 px-4 md:px-6 text-center" id="text-container-2">
+                <h2 class="text-3xl md:text-7xl font-bold text-white drop-shadow-2xl mb-4 md:mb-6">Cold-Pressed.<br class="md:hidden"> Pure Extract.</h2>
+                <p class="text-sm md:text-xl text-white/100 font-medium max-w-xs md:max-w-lg drop-shadow-lg leading-relaxed">Every drop is extracted without heat, locking in the natural flavor and essential nutrients.</p>
             </div>
 
             <!-- Text Overlay 3 -->
-            <div class="absolute inset-0 flex flex-col justify-center items-center z-10 pointer-events-none opacity-0 px-6 text-center" id="text-container-3">
-                <h2 class="text-4xl md:text-7xl font-bold text-white drop-shadow-2xl mb-6">Zero Added Sugar.</h2>
-                <p class="text-base md:text-xl text-white/95 font-light max-w-lg drop-shadow-md">Nature's sweetness needs no enhancement. Experience 100% natural hydration.</p>
+            <div class="absolute inset-0 flex flex-col justify-center items-center z-10 pointer-events-none opacity-0 px-4 md:px-6 text-center" id="text-container-3">
+                <h2 class="text-3xl md:text-7xl font-bold text-white drop-shadow-2xl mb-4 md:mb-6">Zero Added Sugar.</h2>
+                <p class="text-sm md:text-xl text-white/100 font-medium max-w-xs md:max-w-lg drop-shadow-lg leading-relaxed">Nature's sweetness needs no enhancement. Experience 100% pure hydration.</p>
             </div>
         </div>
     </div>
 
     <!-- Complete Website Sections -->
-    <main class="relative z-20 bg-natural-bg shadow-[0_-20px_50px_rgba(0,0,0,0.05)]">
+    <main class="relative z-20 bg-natural-bg shadow-[0_-20px_50px_rgba(0,0,0,0.05)] overflow-hidden">
         
         <!-- Welcome Quote -->
         <section class="py-32 md:py-48 px-6 flex justify-center items-center text-center">
@@ -285,7 +291,8 @@
 
         // Resize Canvas to fit screen
         function resize() {
-            canvas.width = window.innerWidth;
+            // Document clientWidth ignores scrollbar widths, preventing horizontal scroll on Windows
+            canvas.width = document.documentElement.clientWidth;
             canvas.height = window.innerHeight;
             render();
         }
