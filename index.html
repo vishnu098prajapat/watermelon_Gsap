@@ -1,36 +1,40 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>PURE WATERMELON | Premium Juice</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'water-red': '#D32F2F', // Deeper, more premium red
+                        'water-red': '#D32F2F',
                         'water-pink': '#FF6B6B',
-                        'natural-bg': '#FAFAF8', // Very subtle off-white/cream
-                        'dark-text': '#111111', // Almost black
-                        'canvas-bg': '#e8afae', // Matching the image background
+                        'natural-bg': '#FAFAF8',
+                        'dark-text': '#111111',
+                        'canvas-bg': '#e8afae',
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                         serif: ['Playfair Display', 'serif'],
+                    },
+                    /* FIX: Extra small font sizes for very small screens */
+                    fontSize: {
+                        'xs-mobile': ['0.65rem', '1rem'],
                     }
                 }
             }
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
     <style>
-        html, body {
-            overflow-x: hidden;
-            width: 100%;
-            max-width: 100%;
+        * {
+            box-sizing: border-box;
         }
 
         body {
@@ -39,230 +43,399 @@
             padding: 0;
             background-color: #FAFAF8;
             color: #111111;
+            /* FIX: Revert overflow to fix breaking sticky positioning */
+            width: 100%;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
 
-        h1, h2, h3, .font-serif {
+        h1,
+        h2,
+        h3,
+        .font-serif {
             font-family: 'Playfair Display', serif;
         }
 
+        /* FIX: Canvas fills 100% of container, not viewport units which break on mobile */
         #hero-lightpass {
-            width: 100%;
-            height: 100dvh;
             display: block;
-            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
         }
 
-        /* Smooth scrollbar for a premium feel */
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 4px;
         }
+
         ::-webkit-scrollbar-track {
             background: #FAFAF8;
         }
+
         ::-webkit-scrollbar-thumb {
             background: #e2e8f0;
             border-radius: 10px;
         }
+
         ::-webkit-scrollbar-thumb:hover {
             background: #cbd5e1;
         }
 
-        /* Glassmorphism utility */
         .glass-nav {
-            background: rgba(250, 250, 248, 0.85);
+            background: rgba(250, 250, 248, 0.92);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
         }
 
-        /* Subtly animated gradient text */
         .gradient-text {
             background: linear-gradient(to right, #D32F2F, #FF6B6B);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* FIX: Text overlays — smaller & padded on mobile */
+        .hero-text-h1 {
+            font-size: clamp(2rem, 8vw, 6rem);
+            font-weight: 700;
+            color: white;
+            text-align: center;
+            line-height: 1.1;
+            text-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        .hero-text-h2 {
+            font-size: clamp(1.6rem, 6vw, 4.5rem);
+            font-weight: 700;
+            color: white;
+            text-align: center;
+            line-height: 1.15;
+            text-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        .hero-text-sub {
+            font-size: clamp(0.85rem, 2vw, 1.2rem);
+            color: rgba(255, 255, 255, 0.93);
+            font-weight: 300;
+            max-width: 520px;
+            line-height: 1.6;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* FIX: Quote text — clamp for all screen sizes */
+        .quote-text {
+            font-size: clamp(1.4rem, 4.5vw, 3rem);
+            font-family: 'Playfair Display', serif;
+            font-weight: 300;
+            line-height: 1.45;
+            color: #111111;
+        }
+
+        /* FIX: Section heading clamp */
+        .section-heading {
+            font-size: clamp(2rem, 5.5vw, 3.75rem);
+            font-weight: 700;
+            line-height: 1.15;
+        }
+
+        /* FIX: Mobile image height fix */
+        .process-image-wrap {
+            height: 300px;
+        }
+
+        @media (min-width: 768px) {
+            .process-image-wrap {
+                height: 600px;
+            }
+        }
+
+        /* FIX: Prevent feature cards overflow on small screens */
+        .feature-card {
+            padding: 1.5rem 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .feature-card {
+                padding: 2rem;
+            }
+        }
+
+        /* FIX: Safe area insets for notched phones */
+        .safe-bottom {
+            padding-bottom: max(1rem, env(safe-area-inset-bottom));
+        }
+
+        /* FIX: Sticky canvas container uses 100dvh for mobile browsers */
+        .sticky-canvas {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: 100svh;
+            /* svh = small viewport height, fixes mobile browser bar issue */
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Fallback for browsers without svh support */
+        @supports not (height: 100svh) {
+            .sticky-canvas {
+                height: 100vh;
+            }
+        }
+
+        /* FIX: Mobile nav text */
+        .mobile-link {
+            font-size: clamp(1.6rem, 7vw, 2.2rem);
+        }
+
+        /* FIX: CTA button tap target */
+        .cta-btn {
+            min-height: 52px;
+            min-width: 180px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
+
 <body class="bg-natural-bg selection:bg-water-red selection:text-white">
 
-    <!-- Header Navigation -->
-    <header class="fixed top-0 left-0 w-full z-50 px-6 md:px-12 py-5 flex justify-between items-center transition-all duration-500" id="navbar">
-        <div class="font-serif italic font-bold text-2xl md:text-3xl tracking-wide text-white transition-colors duration-500 cursor-pointer drop-shadow-md" id="nav-logo">
+    <!-- ===== HEADER NAV ===== -->
+    <header
+        class="fixed top-0 left-0 w-full z-50 px-4 sm:px-6 md:px-12 py-4 md:py-5 flex justify-between items-center transition-all duration-500"
+        id="navbar">
+        <div class="font-serif italic font-bold text-2xl md:text-3xl tracking-wide text-white transition-colors duration-500 cursor-pointer drop-shadow-md"
+            id="nav-logo">
             Pure.
         </div>
-        <nav class="hidden md:flex gap-12 text-xs tracking-[0.25em] font-medium uppercase text-white transition-colors duration-500" id="nav-links">
+        <nav class="hidden md:flex gap-8 lg:gap-12 text-xs tracking-[0.25em] font-medium uppercase text-white transition-colors duration-500"
+            id="nav-links">
             <a href="#" class="hover:text-water-pink transition-colors duration-300 drop-shadow-md">Home</a>
             <a href="#process" class="hover:text-water-pink transition-colors duration-300 drop-shadow-md">Process</a>
             <a href="#purity" class="hover:text-water-pink transition-colors duration-300 drop-shadow-md">Purity</a>
             <a href="#contact" class="hover:text-water-pink transition-colors duration-300 drop-shadow-md">Taste</a>
         </nav>
-        
-        <!-- Mobile Menu Button -->
-        <button class="md:hidden text-white transition-colors duration-500 relative z-[60]" id="mobile-menu-btn">
-            <svg id="hamburger-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 transition-opacity duration-300">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9h16.5m-16.5 6.75h16.5" />
+
+        <!-- Mobile Menu Button — larger tap target -->
+        <button class="md:hidden text-white transition-colors duration-500 relative z-[60] p-2" id="mobile-menu-btn" aria-label="Open menu">
+            <svg id="hamburger-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke-width="1.5" stroke="currentColor" class="w-7 h-7 transition-opacity duration-300">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9h16.5m-16.5 6.75h16.5" />
             </svg>
-            <svg id="close-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 absolute inset-0 opacity-0 transition-opacity duration-300">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            <svg id="close-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-7 h-7 absolute inset-0 m-2 opacity-0 transition-opacity duration-300">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
         </button>
     </header>
 
     <!-- Mobile Menu Overlay -->
-    <div id="mobile-menu" class="fixed inset-0 bg-natural-bg/95 backdrop-blur-xl z-[45] transform translate-y-[-100%] transition-transform duration-500 flex flex-col items-center justify-center gap-10 md:hidden opacity-0 pointer-events-none text-center">
-        <a href="#" class="mobile-link text-3xl font-serif font-medium text-dark-text tracking-wider hover:text-water-red transition">Home</a>
-        <a href="#process" class="mobile-link text-3xl font-serif font-medium text-dark-text tracking-wider hover:text-water-red transition">Process</a>
-        <a href="#purity" class="mobile-link text-3xl font-serif font-medium text-dark-text tracking-wider hover:text-water-red transition">Purity</a>
-        <a href="#contact" class="mobile-link text-3xl font-serif font-medium text-dark-text tracking-wider hover:text-water-red transition">Taste</a>
-        <div class="mt-8 flex gap-8 text-sm font-semibold tracking-widest uppercase text-gray-500">
+    <div id="mobile-menu"
+        class="fixed inset-0 bg-natural-bg/97 backdrop-blur-xl z-[45] transform translate-y-[-100%] transition-transform duration-500 flex flex-col items-center justify-center gap-8 md:hidden opacity-0 pointer-events-none text-center px-6">
+        <a href="#"
+            class="mobile-link font-serif font-medium text-dark-text tracking-wider hover:text-water-red transition">Home</a>
+        <a href="#process"
+            class="mobile-link font-serif font-medium text-dark-text tracking-wider hover:text-water-red transition">Process</a>
+        <a href="#purity"
+            class="mobile-link font-serif font-medium text-dark-text tracking-wider hover:text-water-red transition">Purity</a>
+        <a href="#contact"
+            class="mobile-link font-serif font-medium text-dark-text tracking-wider hover:text-water-red transition">Taste</a>
+        <div class="mt-6 flex gap-8 text-xs font-semibold tracking-widest uppercase text-gray-400">
             <a href="#" class="hover:text-water-red transition">Shop</a>
             <a href="#" class="hover:text-water-red transition">Insta</a>
         </div>
     </div>
 
-    <!-- The 600vh container allows the user to scroll to trigger the canvas sequence -->
-    <div id="main-scroll" class="relative w-full h-[600vh] bg-canvas-bg overflow-hidden border-none m-0 p-0">
-        
-        <!-- Sticky container holds the canvas and text fixed to the screen as you scroll -->
-        <div class="sticky top-0 w-full h-[100dvh] overflow-hidden flex items-center justify-center">
-            
-            <!-- Canvas Sequence -->
+    <!-- ===== CANVAS SCROLL SEQUENCE ===== -->
+    <!-- FIX: Use 600svh instead of 600vh to handle mobile browser bar correctly -->
+    <div id="main-scroll" class="relative w-full bg-canvas-bg" style="height: 600svh;">
+
+        <div class="sticky-canvas">
             <canvas id="hero-lightpass" class="absolute inset-0 z-0"></canvas>
 
-            <!-- Text Overlay 1 (Positioned at bottom center so it doesn't cover image) -->
-            <div class="absolute inset-0 flex flex-col justify-end pb-12 md:pb-24 items-center z-10 pointer-events-none px-4 md:px-6" id="text-container-1">
-                <p class="text-[0.65rem] md:text-sm font-bold text-white/95 tracking-[0.4em] md:tracking-[0.5em] uppercase mb-3 md:mb-4 drop-shadow-lg">Raw & Unfiltered</p>
-                <h1 class="text-4xl sm:text-5xl md:text-8xl font-bold text-white leading-[1.1] drop-shadow-2xl text-center">Pure<br class="md:hidden"> Watermelon</h1>
+            <!-- Text 1: Initial hero — bottom center, safe from image -->
+            <div class="absolute inset-0 flex flex-col justify-end items-center z-10 pointer-events-none px-4 sm:px-6"
+                id="text-container-1" style="padding-bottom: clamp(4rem, 10vh, 7rem);">
+                <p class="text-white/90 font-medium tracking-[0.4em] uppercase mb-3 drop-shadow-md"
+                    style="font-size: clamp(0.6rem, 2vw, 0.875rem);">Raw &amp; Unfiltered</p>
+                <h1 class="hero-text-h1 drop-shadow-2xl px-2">Pure Watermelon</h1>
             </div>
 
-            <!-- Text Overlay 2 -->
-            <div class="absolute inset-0 flex flex-col justify-center items-center z-10 pointer-events-none opacity-0 px-4 md:px-6 text-center" id="text-container-2">
-                <h2 class="text-3xl md:text-7xl font-bold text-white drop-shadow-2xl mb-4 md:mb-6">Cold-Pressed.<br class="md:hidden"> Pure Extract.</h2>
-                <p class="text-sm md:text-xl text-white/100 font-medium max-w-xs md:max-w-lg drop-shadow-lg leading-relaxed">Every drop is extracted without heat, locking in the natural flavor and essential nutrients.</p>
+            <!-- Text 2: Cold Pressed -->
+            <div class="absolute inset-0 flex flex-col justify-center items-center z-10 pointer-events-none opacity-0 px-4 sm:px-8 text-center"
+                id="text-container-2">
+                <h2 class="hero-text-h2 mb-4 md:mb-6">Cold-Pressed Extract</h2>
+                <p class="hero-text-sub px-2">Every drop is extracted without heat, locking in natural flavor and
+                    essential nutrients.</p>
             </div>
 
-            <!-- Text Overlay 3 -->
-            <div class="absolute inset-0 flex flex-col justify-center items-center z-10 pointer-events-none opacity-0 px-4 md:px-6 text-center" id="text-container-3">
-                <h2 class="text-3xl md:text-7xl font-bold text-white drop-shadow-2xl mb-4 md:mb-6">Zero Added Sugar.</h2>
-                <p class="text-sm md:text-xl text-white/100 font-medium max-w-xs md:max-w-lg drop-shadow-lg leading-relaxed">Nature's sweetness needs no enhancement. Experience 100% pure hydration.</p>
+            <!-- Text 3: Zero Sugar -->
+            <div class="absolute inset-0 flex flex-col justify-center items-center z-10 pointer-events-none opacity-0 px-4 sm:px-8 text-center"
+                id="text-container-3">
+                <h2 class="hero-text-h2 mb-4 md:mb-6">Zero Added Sugar.</h2>
+                <p class="hero-text-sub px-2">Nature's sweetness needs no enhancement. Experience 100% natural
+                    hydration.</p>
             </div>
         </div>
     </div>
 
-    <!-- Complete Website Sections -->
-    <main class="relative z-20 bg-natural-bg shadow-[0_-20px_50px_rgba(0,0,0,0.05)] overflow-hidden">
-        
+    <!-- ===== MAIN CONTENT ===== -->
+    <!-- FIX: overflow-hidden moved here to prevent horizontal scroll without breaking sticky animations -->
+    <main class="relative z-20 bg-natural-bg shadow-[0_-20px_50px_rgba(0,0,0,0.05)] overflow-hidden w-full">
+
         <!-- Welcome Quote -->
-        <section class="py-32 md:py-48 px-6 flex justify-center items-center text-center">
-            <div class="max-w-4xl mx-auto">
-                <p class="text-3xl md:text-5xl font-serif font-light leading-snug md:leading-tight text-dark-text gsap-fade-up">
-                    "We believe that the best ingredients are uncompromised. No concentrates, no artificial flavors. <br/><br/><span class="italic font-medium gradient-text">Just pure watermelon.</span>"
+        <section class="py-20 sm:py-28 md:py-40 px-5 sm:px-8 flex justify-center items-center text-center">
+            <div class="max-w-4xl mx-auto gsap-fade-up">
+                <!-- FIX: clamp handles all screen sizes without overflow -->
+                <p class="quote-text">
+                    "We believe that the best ingredients are uncompromised. No concentrates, no artificial flavors.
+                    <br class="hidden sm:block" /><br class="hidden sm:block" />
+                    <span class="italic font-medium gradient-text">Just pure watermelon.</span>"
                 </p>
             </div>
         </section>
 
         <!-- Process Section -->
-        <section id="process" class="py-24 md:py-32 px-6 md:px-20 bg-white">
+        <section id="process" class="py-16 sm:py-24 md:py-32 px-5 sm:px-8 md:px-16 lg:px-20 bg-white">
             <div class="max-w-7xl mx-auto">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 items-center">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 lg:gap-24 items-center">
+
+                    <!-- Text — on mobile, shows AFTER image -->
                     <div class="gsap-fade-left order-2 md:order-1">
-                        <span class="text-water-red text-xs tracking-[0.4em] uppercase font-bold mb-6 block">The Process</span>
-                        <h2 class="text-4xl md:text-6xl font-bold mb-8 leading-tight">From farm to bottle in under 24 hours.</h2>
-                        <p class="text-gray-500 font-light text-lg leading-relaxed mb-6">
-                            Our watermelons are hand-picked at peak ripeness from sustainable farms. Within hours, they are cold-pressed using massive hydraulic pressure rather than heat. 
+                        <span class="text-water-red text-xs tracking-[0.4em] uppercase font-bold mb-4 block">The
+                            Process</span>
+                        <h2 class="section-heading mb-6 md:mb-8">From farm to bottle in under 24 hours.</h2>
+                        <p class="text-gray-500 font-light text-base sm:text-lg leading-relaxed mb-4">
+                            Our watermelons are hand-picked at peak ripeness from sustainable farms. Within hours, they
+                            are cold-pressed using massive hydraulic pressure rather than heat.
                         </p>
-                        <p class="text-gray-500 font-light text-lg leading-relaxed">
-                            This meticulous process ensures that enzymes, vitamins, and the delicate natural flavor profile are kept fully intact, delivering a vibrant, fresh-from-the-melon experience.
+                        <p class="text-gray-500 font-light text-base sm:text-lg leading-relaxed">
+                            This meticulous process ensures that enzymes, vitamins, and the delicate natural flavor
+                            profile are kept fully intact, delivering a vibrant, fresh-from-the-melon experience.
                         </p>
-                        
-                        <a href="#contact" class="inline-block mt-12 pb-2 border-b border-water-red text-water-red text-sm tracking-[0.2em] uppercase font-semibold hover:text-water-pink hover:border-water-pink transition-colors duration-300">Discover More</a>
+                        <a href="#contact"
+                            class="inline-block mt-8 md:mt-12 pb-2 border-b border-water-red text-water-red text-xs sm:text-sm tracking-[0.2em] uppercase font-semibold hover:text-water-pink hover:border-water-pink transition-colors duration-300">
+                            Discover More
+                        </a>
                     </div>
-                    <div class="bg-gray-100 rounded-tr-[100px] rounded-bl-[100px] overflow-hidden relative shadow-2xl gsap-fade-right order-1 md:order-2 h-[500px] md:h-[700px]">
-                        <!-- Connecting back to one of the frames for aesthetical consistency -->
-                        <img src="./ezgif-frame-150.jpg" alt="Watermelon detail" class="w-full h-full object-cover hover:scale-105 transition-transform duration-1000">
+
+                    <!-- Image -->
+                    <div
+                        class="process-image-wrap bg-gray-100 rounded-tr-[60px] sm:rounded-tr-[80px] md:rounded-tr-[100px] rounded-bl-[60px] sm:rounded-bl-[80px] md:rounded-bl-[100px] overflow-hidden relative shadow-xl gsap-fade-right order-1 md:order-2 w-full">
+                        <img src="./ezgif-frame-150.jpg" alt="Watermelon detail"
+                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-1000">
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Purity Grid -->
-        <section id="purity" class="py-32 md:py-40 px-6 md:px-12 bg-natural-bg">
+        <section id="purity" class="py-20 sm:py-28 md:py-36 px-5 sm:px-8 md:px-12 bg-natural-bg">
             <div class="max-w-7xl mx-auto text-center">
-                <span class="text-water-red text-xs tracking-[0.4em] uppercase font-bold mb-4 block gsap-fade-up">Our Standard</span>
-                <h2 class="text-4xl md:text-6xl font-bold mb-20 gsap-fade-up">Uncompromising Quality</h2>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-12">
+                <span class="text-water-red text-xs tracking-[0.4em] uppercase font-bold mb-3 block gsap-fade-up">Our
+                    Standard</span>
+                <h2 class="section-heading mb-12 sm:mb-16 md:mb-20 gsap-fade-up">Uncompromising Quality</h2>
+
+                <!-- FIX: 1 col mobile, 3 col desktop, gap adjusts -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-6 md:gap-10">
+
                     <!-- Feature 1 -->
-                    <div class="flex flex-col items-center gsap-fade-up p-8" style="transition-delay: 100ms;">
-                        <div class="w-20 h-20 rounded-full bg-white shadow-lg flex items-center justify-center mb-8 text-water-red">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z" />
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.468 5.99 5.99 0 0 0-1.925 3.547 5.975 5.975 0 0 1-2.133-1.001A3.75 3.75 0 0 0 12 18Z" />
+                    <div class="feature-card flex flex-col items-center gsap-fade-up">
+                        <div
+                            class="w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 rounded-full bg-white shadow-lg flex items-center justify-center mb-6 text-water-red flex-shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-7 h-7">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 18a3.75 3.75 0 0 0 .495-7.468 5.99 5.99 0 0 0-1.925 3.547 5.975 5.975 0 0 1-2.133-1.001A3.75 3.75 0 0 0 12 18Z" />
                             </svg>
                         </div>
-                        <h3 class="text-2xl font-serif font-semibold mb-4">Never Heated</h3>
-                        <p class="text-gray-500 font-light text-base leading-relaxed max-w-xs text-center">
-                            Standard juices are pasteurized with heat, which destroys nutrients. We strictly use high-pressure processing.
+                        <h3 class="text-xl sm:text-2xl font-serif font-semibold mb-3">Never Heated</h3>
+                        <p class="text-gray-500 font-light text-sm sm:text-base leading-relaxed max-w-xs text-center">
+                            Standard juices are pasteurized with heat, which destroys nutrients. We strictly use
+                            high-pressure processing.
                         </p>
                     </div>
-                    
+
                     <!-- Feature 2 -->
-                    <div class="flex flex-col items-center gsap-fade-up p-8" style="transition-delay: 200ms;">
-                        <div class="w-20 h-20 rounded-full bg-white shadow-lg flex items-center justify-center mb-8 text-water-red">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    <div class="feature-card flex flex-col items-center gsap-fade-up" style="transition-delay: 100ms;">
+                        <div
+                            class="w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 rounded-full bg-white shadow-lg flex items-center justify-center mb-6 text-water-red flex-shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-7 h-7">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                             </svg>
                         </div>
-                        <h3 class="text-2xl font-serif font-semibold mb-4">No Additives</h3>
-                        <p class="text-gray-500 font-light text-base leading-relaxed max-w-xs text-center">
-                            Zero sugar, zero preservatives, zero water added. Just the pure, vibrant juice from fresh watermelons.
+                        <h3 class="text-xl sm:text-2xl font-serif font-semibold mb-3">No Additives</h3>
+                        <p class="text-gray-500 font-light text-sm sm:text-base leading-relaxed max-w-xs text-center">
+                            Zero sugar, zero preservatives, zero water added. Just the pure, vibrant juice from fresh
+                            watermelons.
                         </p>
                     </div>
 
                     <!-- Feature 3 -->
-                    <div class="flex flex-col items-center gsap-fade-up p-8" style="transition-delay: 300ms;">
-                        <div class="w-20 h-20 rounded-full bg-white shadow-lg flex items-center justify-center mb-8 text-water-red">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
+                    <div class="feature-card flex flex-col items-center gsap-fade-up" style="transition-delay: 200ms;">
+                        <div
+                            class="w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 rounded-full bg-white shadow-lg flex items-center justify-center mb-6 text-water-red flex-shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-7 h-7">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
                             </svg>
                         </div>
-                        <h3 class="text-2xl font-serif font-semibold mb-4">Eco-Friendly</h3>
-                        <p class="text-gray-500 font-light text-base leading-relaxed max-w-xs text-center">
-                            Bottled in highly recyclable premium glass, ensuring sustainability and avoiding plastic chemicals.
+                        <h3 class="text-xl sm:text-2xl font-serif font-semibold mb-3">Eco-Friendly</h3>
+                        <p class="text-gray-500 font-light text-sm sm:text-base leading-relaxed max-w-xs text-center">
+                            Bottled in highly recyclable premium glass, ensuring sustainability and avoiding plastic
+                            chemicals.
                         </p>
                     </div>
                 </div>
             </div>
         </section>
-        
-        <!-- Call to Action -->
-        <section id="contact" class="py-32 bg-dark-text text-white text-center px-6">
+
+        <!-- CTA Section -->
+        <section id="contact"
+            class="py-20 sm:py-28 md:py-32 bg-dark-text text-white text-center px-5 sm:px-8 safe-bottom">
             <div class="max-w-3xl mx-auto gsap-fade-up">
-                <h2 class="text-4xl md:text-6xl font-serif font-bold mb-8">Taste the Purity.</h2>
-                <p class="text-gray-300 font-light text-lg md:text-xl mb-12">Experience the most refreshing, nutrient-dense watermelon juice ever created. Delivered fresh to your door.</p>
-                <button class="bg-water-red hover:bg-white hover:text-water-red text-white transition-all duration-300 px-10 py-4 rounded-full text-xs font-bold tracking-[0.2em] uppercase shadow-xl hover:shadow-2xl">
+                <!-- FIX: clamp for CTA heading -->
+                <h2 class="font-serif font-bold mb-6 md:mb-8" style="font-size: clamp(2rem, 6vw, 3.75rem);">Taste the
+                    Purity.</h2>
+                <p class="text-gray-300 font-light text-base sm:text-lg md:text-xl mb-10 md:mb-12 max-w-xl mx-auto">
+                    Experience the most refreshing, nutrient-dense watermelon juice ever created. Delivered fresh to
+                    your door.
+                </p>
+                <!-- FIX: cta-btn ensures minimum tap target size -->
+                <button
+                    class="cta-btn bg-water-red hover:bg-white hover:text-water-red text-white transition-all duration-300 px-8 sm:px-10 py-3 sm:py-4 rounded-full text-xs font-bold tracking-[0.2em] uppercase shadow-xl hover:shadow-2xl">
                     Order Now
                 </button>
             </div>
         </section>
 
         <!-- Footer -->
-        <footer class="bg-natural-bg py-16 px-8 border-t border-gray-200">
-            <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
-                <div class="font-serif italic font-bold text-3xl mb-8 md:mb-0 text-dark-text">
-                    Pure.
-                </div>
-                <div class="flex gap-10 text-xs font-semibold tracking-widest uppercase text-gray-500">
+        <footer class="bg-natural-bg py-12 sm:py-16 px-5 sm:px-8 border-t border-gray-100">
+            <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-6 sm:gap-0">
+                <div class="font-serif italic font-bold text-2xl sm:text-3xl text-dark-text">Pure.</div>
+                <!-- FIX: Smaller gap on mobile, wrap if needed -->
+                <div
+                    class="flex flex-wrap justify-center gap-6 sm:gap-10 text-xs font-semibold tracking-widest uppercase text-gray-500">
                     <a href="#" class="hover:text-water-red transition">Shop</a>
                     <a href="#" class="hover:text-water-red transition">Instagram</a>
                     <a href="#" class="hover:text-water-red transition">Contact</a>
                 </div>
             </div>
-            <div class="max-w-7xl mx-auto mt-12 flex flex-col md:flex-row justify-between items-center text-xs text-gray-400 font-light">
-                <p>&copy; 2026 Pure Watermelon Juice Co. All rights reserved.</p>
-                <div class="mt-4 md:mt-0 flex gap-6">
+            <div
+                class="max-w-7xl mx-auto mt-8 sm:mt-12 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-0 text-xs text-gray-400 font-light">
+                <p class="text-center sm:text-left">&copy; 2026 Pure Watermelon Juice Co. All rights reserved.</p>
+                <div class="flex gap-5 sm:gap-6">
                     <a href="#" class="hover:text-gray-600 transition">Privacy Policy</a>
                     <a href="#" class="hover:text-gray-600 transition">Terms of Service</a>
                 </div>
@@ -270,7 +443,7 @@
         </footer>
     </main>
 
-    <!-- GSAP Scripts -->
+    <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
@@ -279,82 +452,81 @@
 
         const canvas = document.getElementById("hero-lightpass");
         const context = canvas.getContext("2d");
+        // Performance optimization: Step down frame count on mobile devices to save memory & bandwidth
+        const isMobile = window.innerWidth < 768;
+        const totalFrames = 208;
+        // On mobile we skip every alternate frame, dropping the load. Desktop loads all 208.
+        const frameStep = isMobile ? 2 : 1; 
+        const frameCount = Math.floor(totalFrames / frameStep);
 
-        // The sequence has 208 frames
-        const frameCount = 208;
-        const currentFrame = index => (
-            `./ezgif-frame-${(index + 1).toString().padStart(3, '0')}.jpg`
-        );
+        const currentFrame = index => {
+            // Map the array index back to the exact image file index (1 to 208)
+            const realIndex = (index * frameStep) + 1;
+            return `./ezgif-frame-${realIndex.toString().padStart(3, '0')}.jpg`;
+        };
 
         const images = [];
         const watermelon = { frame: 0 };
 
-        // Resize Canvas to fit screen
+        // FIX: Resize canvas using the wrapper's actual dimensions
         function resize() {
-            // Document clientWidth ignores scrollbar widths, preventing horizontal scroll on Windows
-            canvas.width = document.documentElement.clientWidth;
-            canvas.height = window.innerHeight;
+            const wrapper = canvas.parentElement;
+            canvas.width = wrapper.clientWidth;
+            canvas.height = wrapper.clientHeight;
             render();
         }
-        window.addEventListener("resize", resize);
 
-        // Preload Images in background
+        // FIX: Use ResizeObserver for accurate resize on mobile (handles browser bar appear/disappear)
+        const ro = new ResizeObserver(() => {
+            resize();
+            ScrollTrigger.refresh();
+        });
+        ro.observe(canvas.parentElement);
+
         let isInitialized = false;
-        
+
         for (let i = 0; i < frameCount; i++) {
             const img = new Image();
             img.src = currentFrame(i);
-            
-            // Start the experience as soon as the first frame loads
             if (i === 0) {
                 img.onload = () => {
-                    if (!isInitialized) {
-                        isInitialized = true;
-                        initAnimation();
-                    }
+                    if (!isInitialized) { isInitialized = true; initAnimation(); }
                 };
             }
             images.push(img);
         }
-        
-        // Fallback: If network is strangely hanging, start after 1s anyway
-        setTimeout(() => { 
-            if (!isInitialized) {
-                isInitialized = true;
-                initAnimation(); 
-            }
+
+        setTimeout(() => {
+            if (!isInitialized) { isInitialized = true; initAnimation(); }
         }, 1000);
 
-        // Setup Header Color Change on Scroll
+        // ===== NAV SCROLL BEHAVIOR =====
         const navbar = document.getElementById('navbar');
         const navLogo = document.getElementById('nav-logo');
-        const navLinksAnchors = document.querySelectorAll('#nav-links a');
+        const navLinks = document.querySelectorAll('#nav-links a');
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-
-        // Mobile Menu Logic
         const mobileMenu = document.getElementById('mobile-menu');
         const hamburgerIcon = document.getElementById('hamburger-icon');
         const closeIcon = document.getElementById('close-icon');
-        const mobileLinks = document.querySelectorAll('.mobile-link');
         let isMenuOpen = false;
 
         function toggleMenu() {
             isMenuOpen = !isMenuOpen;
             if (isMenuOpen) {
-                mobileMenu.classList.replace('translate-y-[-100%]', 'translate-y-0');
+                mobileMenu.style.transform = 'translateY(0)';
                 mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
                 hamburgerIcon.classList.add('opacity-0');
                 closeIcon.classList.remove('opacity-0');
-                
                 mobileMenuBtn.classList.replace('text-white', 'text-dark-text');
                 navLogo.classList.replace('text-white', 'text-dark-text');
             } else {
-                mobileMenu.classList.replace('translate-y-0', 'translate-y-[-100%]');
+                mobileMenu.style.transform = 'translateY(-100%)';
                 mobileMenu.classList.add('opacity-0', 'pointer-events-none');
                 hamburgerIcon.classList.remove('opacity-0');
                 closeIcon.classList.add('opacity-0');
-                
-                if (window.scrollY <= window.innerHeight * 5.5) {
+                // Restore white only if still in canvas zone
+                const scrollLimit = document.getElementById('main-scroll').offsetHeight * 0.92;
+                if (window.scrollY <= scrollLimit) {
                     mobileMenuBtn.classList.replace('text-dark-text', 'text-white');
                     navLogo.classList.replace('text-dark-text', 'text-white');
                 }
@@ -362,50 +534,42 @@
         }
 
         mobileMenuBtn.addEventListener('click', toggleMenu);
-        mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+        document.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', toggleMenu));
 
+        // FIX: Scroll threshold based on actual scroll height, not viewport units
         window.addEventListener('scroll', () => {
-            // Once scrolled past the canvas section (600vh)
-            if (window.scrollY > window.innerHeight * 5.5) {
+            const scrollZoneEnd = document.getElementById('main-scroll').offsetHeight * 0.92;
+            if (window.scrollY > scrollZoneEnd) {
                 navbar.classList.add('glass-nav');
-                navbar.classList.remove('py-5');
-                navbar.classList.add('py-4');
+                navbar.classList.replace('py-5', 'py-3');
                 navLogo.classList.replace('text-white', 'text-dark-text');
                 navLogo.classList.remove('drop-shadow-md');
-                
-                if (!isMenuOpen) {
-                    mobileMenuBtn.classList.replace('text-white', 'text-dark-text');
-                }
-                
-                navLinksAnchors.forEach(a => {
+                if (!isMenuOpen) mobileMenuBtn.classList.replace('text-white', 'text-dark-text');
+                navLinks.forEach(a => {
                     a.classList.replace('text-white', 'text-dark-text');
                     a.classList.replace('hover:text-water-pink', 'hover:text-water-red');
                     a.classList.remove('drop-shadow-md');
                 });
             } else {
                 navbar.classList.remove('glass-nav');
-                navbar.classList.remove('py-4');
-                navbar.classList.add('py-5');
-                
+                navbar.classList.replace('py-3', 'py-5');
                 if (!isMenuOpen) {
                     navLogo.classList.replace('text-dark-text', 'text-white');
                     navLogo.classList.add('drop-shadow-md');
                     mobileMenuBtn.classList.replace('text-dark-text', 'text-white');
                 }
-
-                navLinksAnchors.forEach(a => {
+                navLinks.forEach(a => {
                     a.classList.replace('text-dark-text', 'text-white');
                     a.classList.replace('hover:text-water-red', 'hover:text-water-pink');
                     a.classList.add('drop-shadow-md');
                 });
             }
-        });
+        }, { passive: true });
 
+        // ===== ANIMATIONS =====
         function initAnimation() {
-            // Re-render
             resize();
 
-            // Setup Canvas ScrollTrigger
             gsap.to(watermelon, {
                 frame: frameCount - 1,
                 snap: "frame",
@@ -414,12 +578,11 @@
                     trigger: "#main-scroll",
                     start: "top top",
                     end: "bottom bottom",
-                    scrub: 0.8 // Smoother scrubbing 
+                    scrub: 0.8
                 },
-                onUpdate: render 
+                onUpdate: render
             });
 
-            // Master Timeline for canvas overlay texts
             const textTl = gsap.timeline({
                 scrollTrigger: {
                     trigger: "#main-scroll",
@@ -430,69 +593,60 @@
             });
 
             textTl
-                .to("#text-container-1", { opacity: 0, y: -50, duration: 1 }, 0)
-                .fromTo("#text-container-2", { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1 }, 2)
-                .to("#text-container-2", { opacity: 0, y: -50, duration: 1 }, 4)
-                .fromTo("#text-container-3", { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1 }, 6);
+                .to("#text-container-1", { opacity: 0, y: -40, duration: 1 }, 0)
+                .fromTo("#text-container-2", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1 }, 2)
+                .to("#text-container-2", { opacity: 0, y: -40, duration: 1 }, 4)
+                .fromTo("#text-container-3", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1 }, 6);
 
-            // Animation for regular sections
-            gsap.utils.toArray('.gsap-fade-up').forEach(element => {
-                gsap.fromTo(element, 
-                    { opacity: 0, y: 60 },
+            gsap.utils.toArray('.gsap-fade-up').forEach(el => {
+                gsap.fromTo(el,
+                    { opacity: 0, y: 50 },
                     {
-                        opacity: 1, y: 0, duration: 1.2, ease: "power3.out",
-                        scrollTrigger: { trigger: element, start: "top 85%" }
+                        opacity: 1, y: 0, duration: 1.1, ease: "power3.out",
+                        scrollTrigger: { trigger: el, start: "top 88%" }
                     }
                 );
             });
 
-            gsap.utils.toArray('.gsap-fade-left').forEach(element => {
-                gsap.fromTo(element, 
-                    { opacity: 0, x: -60 },
+            gsap.utils.toArray('.gsap-fade-left').forEach(el => {
+                gsap.fromTo(el,
+                    { opacity: 0, x: -50 },
                     {
-                        opacity: 1, x: 0, duration: 1.2, ease: "power3.out",
-                        scrollTrigger: { trigger: element, start: "top 85%" }
+                        opacity: 1, x: 0, duration: 1.1, ease: "power3.out",
+                        scrollTrigger: { trigger: el, start: "top 88%" }
                     }
                 );
             });
 
-            gsap.utils.toArray('.gsap-fade-right').forEach(element => {
-                gsap.fromTo(element, 
-                    { opacity: 0, x: 60 },
+            gsap.utils.toArray('.gsap-fade-right').forEach(el => {
+                gsap.fromTo(el,
+                    { opacity: 0, x: 50 },
                     {
-                        opacity: 1, x: 0, duration: 1.2, ease: "power3.out",
-                        scrollTrigger: { trigger: element, start: "top 85%" }
+                        opacity: 1, x: 0, duration: 1.1, ease: "power3.out",
+                        scrollTrigger: { trigger: el, start: "top 88%" }
                     }
                 );
             });
         }
 
         function render() {
-            // Background color for canvas matching image edges
             context.fillStyle = "#e8afae";
             context.fillRect(0, 0, canvas.width, canvas.height);
-            
+
             const img = images[watermelon.frame];
             if (!img || !img.complete) return;
 
-            // Using Math.max achieves "object-fit: cover".
             const hRatio = canvas.width / img.width;
             const vRatio = canvas.height / img.height;
-            const ratio  = Math.max(hRatio, vRatio);
+            const ratio = Math.max(hRatio, vRatio);
+            const cx = (canvas.width - img.width * ratio) / 2;
+            const cy = (canvas.height - img.height * ratio) / 2;
 
-            const centerShift_x = (canvas.width - img.width * ratio) / 2;
-            const centerShift_y = (canvas.height - img.height * ratio) / 2;
-            
-            // Premium smooth rendering
             context.imageSmoothingEnabled = true;
             context.imageSmoothingQuality = 'high';
-
-            context.drawImage(
-                img, 
-                0, 0, img.width, img.height,
-                centerShift_x, centerShift_y, img.width * ratio, img.height * ratio
-            );
+            context.drawImage(img, 0, 0, img.width, img.height, cx, cy, img.width * ratio, img.height * ratio);
         }
     </script>
 </body>
+
 </html>
